@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Save Console Output'){
             steps{
-                sh 'my-command | tee output.log'
+                bat 'my-command | tee output.log'
            }
         }
     }
