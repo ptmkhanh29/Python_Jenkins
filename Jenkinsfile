@@ -4,9 +4,9 @@ pipeline {
         stage('Clone'){
             steps{
                 echo "Make the output directory"
-                sh 'mkdir -p build'
+                //sh 'mkdir -p build'
                 echo "Cloning files..."
-                dir('build'){
+                dir('/Users/Admin/Desktop/python_cicd/Jenkins_Test'){
                     git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
                 }
             }
