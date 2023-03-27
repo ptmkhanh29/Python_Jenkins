@@ -3,22 +3,14 @@ pipeline {
     stages {
         stage('Checkout'){
             steps{
-                dir('/Users/Admin/Desktop/python_cicd/Jenkins_Test'){
-                    checkout scmGit(branches: [[name: '*/python_ver']], 
+                checkout scmGit(branches: [[name: '*/python_ver']], 
                                 extensions: [], 
                                 userRemoteConfigs: [[url: 'https://github.com/ptmkhanh29/Python_Jenkins.git']])
                 }
             }
-        }
-        stage('Configure Git user') {
-            steps {
-                sh 'git remote add upstream https://github.com/ptmkhanh29/Python_Jenkins'
-            }
-        }
-    
         stage('Build'){
             steps{
-                //git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
+                git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
                 bat 'python python_cicd.py'
             }
         }
