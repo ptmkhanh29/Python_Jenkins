@@ -10,6 +10,13 @@ pipeline {
                 }
             }
         }
+        stage('Configure Git user') {
+            steps {
+                sh 'git config user.name "ptmkhanh29'
+                sh 'git config user.email "ptmkhanh29@gmail.com"'
+            }
+        }
+    
         stage('Build'){
             steps{
                 //git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
