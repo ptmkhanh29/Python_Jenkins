@@ -21,10 +21,8 @@ pipeline {
     }
     post {
         always {
-            emailext body: 'A Test EMail', 
-                recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
-                                     [$class: 'RequesterRecipientProvider']], 
-                subject: 'Test'
+            echo 'One way or another, I have finished'
+            deleteDir() /* clean up our workspace */
         }           
         success {
             echo 'This will run only if successful'
