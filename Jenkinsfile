@@ -12,8 +12,7 @@ pipeline {
         }
         stage('Configure Git user') {
             steps {
-                sh 'git config user.name "ptmkhanh29'
-                sh 'git config user.email "ptmkhanh29@gmail.com"'
+                sh 'git remote add upstream https://github.com/ptmkhanh29/Python_Jenkins'
             }
         }
     
