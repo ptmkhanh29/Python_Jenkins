@@ -12,7 +12,7 @@ pipeline {
             steps{
                 git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
                 //bat 'python python_cicd.py > log.txt'  
-                bat 'python python_cicd.py > ${env.WORKSPACE}\\log.txt'}            
+                bat 'python python_cicd.py > ${env.WORKSPACE}\\log.txt'            
             }
         }
         stage('Test'){
