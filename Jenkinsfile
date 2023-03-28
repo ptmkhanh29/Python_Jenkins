@@ -16,22 +16,12 @@ pipeline {
         }
         stage('Capture Console Output') {
             steps{
-                script{
+                script {
+                    println "Starting capture console output"
                     def logContent = currentBuild.rawBuild.getLog()
-                    def directory = "${env.WORKSPACE}/Logs" // change directory name here
-                    writeFile file: "${directory}/buildConsolelog.txt", text: logContent
-                    //script {
-                        //def logContent = Jenkins.getInstance().getItemByFullName(env.JOB_NAME).getBuildByNumber(
-                            //Integer.parseInt(env.BUILD_NUMBER)).logFile.text
-                        // copy the log in the job's own workspace
-                        //writeFile file: directory + "/buildConsolelog.txt",
-                            //text: logContent
-                    //}
-                    def consoleOutput = readFile directory + '/buildConsolelog.txt'
-                    echo 'Console output saved in the buildConsolelog file'
-                    echo '--------------------------------------'
-                    echo consoleOutput
-                    echo '--------------------------------------'
+                    // ...
+                    writeFile file: directory + "/buildConsolelog.txt", text: logContent, charset: 'UTF-8'
+                    println "Console output saved to file"
                 }
             }
         }
