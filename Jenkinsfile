@@ -10,12 +10,11 @@ pipeline {
         }
         stage('Build'){
             steps{
-                git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
-                //bat 'python python_cicd.py > log.txt'  
+                git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git' 
                 bat 'python python_cicd.py'           
             }
         }
-        stage('capture console output') {
+        stage('Capture Console Output') {
             steps{
                 script{
                     def logContent = currentBuild.rawBuild.getLog()
