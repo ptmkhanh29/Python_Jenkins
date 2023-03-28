@@ -13,7 +13,7 @@ pipeline {
                 git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
                 script {
                     def buildLog = sh (
-                        script: 'python python_cicd.py', 
+                        bat 'python python_cicd.py', 
                         returnStdout: true
                     )
                     stash name: 'buildLog', includes: 'log.txt'
