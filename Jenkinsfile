@@ -41,36 +41,5 @@ pipeline {
             }
         }
         
-    }
-    post {
-        always {
-            echo 'One way or another, I have finished'
-            //deleteDir() /* clean up our workspace */
-        }           
-        success {
-            echo 'This will run only if successful'
-            script {
-                bat "type buildConsolelog.txt"
-            }
-        }
-        failure {
-            echo 'This will run only if failed'
-            script {
-                bat "type buildConsolelog.txt"
-            }
-        }
-        unstable {
-            echo 'This will run only if the run was marked as unstable'
-            script {
-                bat "type buildConsolelog.txt"
-            }
-        }
-        changed {
-            echo 'This will run only if the state of the Pipeline has changed'
-            echo 'For example, if the Pipeline was previously failing but is now successful'
-            script {
-                bat "type buildConsolelog.txt"
-            }
-        }
-    }
+    }    
 }
