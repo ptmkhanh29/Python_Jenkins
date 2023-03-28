@@ -11,7 +11,13 @@ pipeline {
         stage('Build'){
             steps{
                 git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
-                bat 'python python_cicd.py | tee log.txt'
+                script {
+                    def buildLog = sh (
+                        script: 'python python_cicd.py', 
+                        returnStdout: true
+                    )
+                    stash name: 'buildLog', includes: 'log.txt'
+                }
                 
             }
         }
@@ -29,19 +35,28 @@ pipeline {
         }           
         success {
             echo 'This will run only if successful'
-            //writeFile(file: 'log.txt', text: "${env.BUILD_LOG}")
+            script {
+                unstash 'buildLog'
+            }
         }
         failure {
             echo 'This will run only if failed'
-            //writeFile(file: 'log.txt', text: "${env.BUILD_LOG}")
+            script {
+                unstash 'buildLog'
+            }
         }
         unstable {
             echo 'This will run only if the run was marked as unstable'
-            //writeFile(file: 'log.txt', text: "${env.BUILD_LOG}")
+            script {
+                unstash 'buildLog'
+            }
         }
         changed {
             echo 'This will run only if the state of the Pipeline has changed'
-            //echo 'For example, if the Pipeline was previously failing but is now successful'
+            echo 'For example, if the Pipeline was previously failing but is now successful'
+            script {
+                unstash 'buildLog'
+            }
         }
     }
 }
