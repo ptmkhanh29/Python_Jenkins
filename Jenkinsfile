@@ -11,10 +11,8 @@ pipeline {
         stage('Build'){
             steps{
                 git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
-                bat 'python python_cicd.py > log.txt'  
-                dir(path: 'C:\\Users\\Admin\\Desktop\\python_cicd\\Python_Jenkins') {
-                    bat 'type log.txt'
-                }            
+                //bat 'python python_cicd.py > log.txt'  
+                bat 'python python_cicd.py > ${env.WORKSPACE}\\log.txt'}            
             }
         }
         stage('Test'){
