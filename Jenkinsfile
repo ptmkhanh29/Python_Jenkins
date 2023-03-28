@@ -18,7 +18,7 @@ pipeline {
             steps{
                 script{
                     def logContent = currentBuild.rawBuild.getLog()
-                    def directory = "${env.WORKSPACE}/Logs" // change directory name here
+                    def directory = "C:/Users/Admin/Desktop/python_cicd/Output_Jenkins/${env.JOB_NAME}_${env.BUILD_NUMBER}" // change directory name here
                     writeFile file: "${directory}/buildConsolelog.txt", text: logContent, charset: 'UTF-8'
                     //script {
                         //def logContent = Jenkins.getInstance().getItemByFullName(env.JOB_NAME).getBuildByNumber(
@@ -42,4 +42,23 @@ pipeline {
         }
         
     }    
+    post {
+        always {
+            echo 'One way or another, I have finished'
+            //deleteDir() /* clean up our workspace */
+        }           
+        success {
+            echo 'This will run only if successful'            
+        }
+        failure {
+            echo 'This will run only if failed'            
+        }
+        unstable {
+            echo 'This will run only if the run was marked as unstable'            
+        }
+        changed {
+            echo 'This will run only if the state of the Pipeline has changed'
+            echo 'For example, if the Pipeline was previously failing but is now successful'            
+        }
+    }
 }
