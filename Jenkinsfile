@@ -12,7 +12,9 @@ pipeline {
             steps{
                 git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
                 bat 'python python_cicd.py > log.txt'  
-                dir()              
+                dir(path: 'C:\\Users\\Admin\\Desktop\\python_cicd\\Python_Jenkins') {
+                    bat 'type log.txt'
+                }            
             }
         }
         stage('Test'){
