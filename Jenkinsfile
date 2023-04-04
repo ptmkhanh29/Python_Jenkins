@@ -14,12 +14,12 @@ pipeline {
                 bat 'python python_cicd.py'           
             }
         }
-        /*
+
         stage('Capture Console Output') {
             steps{
                 script{
                     def logContent = currentBuild.rawBuild.getLog()
-                    def directory = "C:/Users/Admin/Desktop/python_cicd/Output_Jenkins/${env.JOB_NAME}_${env.BUILD_NUMBER}" // change directory name here
+                    def directory = "C:/Users/khanh.phan-minh/Ouput_Jenkins/${env.JOB_NAME}_${env.BUILD_NUMBER}" // change directory name here
                     writeFile file: "${directory}/buildConsolelog.txt", text: logContent, charset: 'UTF-8'
                     //script {
                         //def logContent = Jenkins.getInstance().getItemByFullName(env.JOB_NAME).getBuildByNumber(
@@ -35,7 +35,7 @@ pipeline {
                     echo '--------------------------------------'
                 }
             }
-        }*/
+        }
         stage('Test'){
             steps{
                 echo "The job has been tested"
