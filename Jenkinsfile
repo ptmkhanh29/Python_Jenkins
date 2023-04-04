@@ -14,6 +14,7 @@ pipeline {
                 bat 'python python_cicd.py'           
             }
         }
+        /*
         stage('Capture Console Output') {
             steps{
                 script{
@@ -34,7 +35,7 @@ pipeline {
                     echo '--------------------------------------'
                 }
             }
-        }
+        }*/
         stage('Test'){
             steps{
                 echo "The job has been tested"
