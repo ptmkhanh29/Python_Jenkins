@@ -1,0 +1,15 @@
+{
+  "NAME_BRANCH": {
+    "name": "BRANCH",
+    "description": "Select git branch",
+    "type": "ActiveChoicesReactiveParameter",
+    "$": {
+      "groovy": {
+        "class": "ActiveChoicesReactiveParameter",
+        "name": "BRANCH",
+        "description": "Select git branch",
+        "NAME_BRANCH": "BRANCH"
+      }
+    }
+  }
+}

@@ -12,6 +12,7 @@ pipeline {
         stage('Build'){
             steps{
                 git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git' 
+                // if Window OS using bat, linux OS using sh
                 bat 'python python_cicd.py'           
             }
         }
