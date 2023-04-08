@@ -1,5 +1,6 @@
+/*
 def paramPath = 'C:/Users/khanh.phan-minh/Desktop/Jenkins/Github/Python_Jenkins/ParameterDefinition.groovy'
-/* groovylint-disable-next-line UnusedVariable */
+//groovylint-disable-next-line UnusedVariable 
 def branchName = ''
 node {
     load "${paramPath}"
@@ -12,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                //checkout scmGit(branches: [[name: '*/python_ver']],
+                /*checkout scmGit(branches: [[name: 'python_ver']],
                 //extensions: [],
                 //userRemoteConfigs: [[url: 'https://github.com/ptmkhanh29/Python_Jenkins.git']])
                 //echo "Checkout Done!"
@@ -53,7 +54,7 @@ pipeline {
                     echo '--------------------------------------'
                 }
             }
-        }*/
+        }
         stage('Test') {
             steps {
                 echo 'The job has been tested'
@@ -63,7 +64,7 @@ pipeline {
     post {
         always {
             echo 'One way or another, I have finished'
-            deleteDir() /* clean up our workspace */
+            deleteDir() //clean up our workspace 
         }
         success {
             echo 'This will run only if successful'
@@ -77,6 +78,19 @@ pipeline {
         changed {
             echo 'This will run only if the state of the Pipeline has changed'
             echo 'For example, if the Pipeline was previously failing but is now successful'
+        }
+    }
+}*/
+pipeline {
+    agent any
+    parameters {
+        string(name: 'PARAMETER_NAME', defaultValue: 'default_value', description: 'Description of parameter')
+    }
+    stages {
+        stage('Example Stage') {
+            steps {
+                echo "The parameter value is: ${params.PARAMETER_NAME}"
+            }
         }
     }
 }
