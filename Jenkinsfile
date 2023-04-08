@@ -2,7 +2,7 @@ def paramPath = 'C:/Users/khanh.phan-minh/Desktop/Jenkins/Github/Python_Jenkins/
 /* groovylint-disable-next-line UnusedVariable */
 def branchName = ''
 node {
-    load paramPath
+    load "${paramPath}"
 
     // Get the selected git branch from user input
     branchName = ParameterDefinition.BRANCH_NAME
