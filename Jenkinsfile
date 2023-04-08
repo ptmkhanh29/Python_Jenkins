@@ -1,17 +1,31 @@
+def paramPath = "C:/Users/khanh.phan-minh/Desktop/Jenkins/Github/Python_Jenkins/ParameterDefinition.groovy"
+/* groovylint-disable-next-line UnusedVariable */
+def branchName = ""
+node {
+    load paramPath
+
+    // Get the selected git branch from user input
+    branchName = ParameterDefinition.BRANCH_NAME
+}
 pipeline {
     agent any
     stages { 
         stage('Checkout'){
-            steps{
-                checkout scmGit(branches: [[name: '*/python_ver']], 
-                extensions: [], 
-                userRemoteConfigs: [[url: 'https://github.com/ptmkhanh29/Python_Jenkins.git']])
+            steps{                
+                //checkout scmGit(branches: [[name: '*/python_ver']], 
+                //extensions: [], 
+                //userRemoteConfigs: [[url: 'https://github.com/ptmkhanh29/Python_Jenkins.git']])
+                //echo "Checkout Done!"
+                checkout scmGit(branches: [[name: branchName]],
+                                extensions: [],
+                                userRemoteConfigs: [[url: 'https://github.com/ptmkhanh29/Python_Jenkins.git']])
                 echo "Checkout Done!"
+                
             }
         }
         stage('Build'){
             steps{
-                git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git' 
+                //git branch: 'python_ver', url: 'https://github.com/ptmkhanh29/Python_Jenkins.git' 
                 // if Window OS using bat, linux OS using sh
                 bat 'python python_cicd.py'           
             }
