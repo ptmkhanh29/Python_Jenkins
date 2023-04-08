@@ -6,6 +6,7 @@ pipeline {
                 checkout scmGit(branches: [[name: '*/python_ver']], 
                 extensions: [], 
                 userRemoteConfigs: [[url: 'https://github.com/ptmkhanh29/Python_Jenkins.git']])
+                echo "Checkout Done!"
             }
         }
         stage('Build'){
