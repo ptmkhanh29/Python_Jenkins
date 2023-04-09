@@ -141,48 +141,29 @@ pipeline {
         }
     }
 }*/
-properties([
-    parameters([
-        [
-            $class: 'ActiveChoicesReactiveParameter',
-            choiceType: 'PT_SINGLE_SELECT',
-            description: 'Select the git branch to build',
-            filterLength: 1,
-            filterable: false,
-            name: 'GIT_BRANCH',
-            script: [
-                $class: 'GroovyScript',
-                fallbackScript: [
-                    classpath: [],
-                    sandbox: false,
-                    script: 'return ["master"]'
-                ],
-                script: [
-                    classpath: [],
-                    sandbox: false,
-                    script: '''
-                        def gitBranches = []
-                        def command = "git ls-remote --heads https://github.com/ptmkhanh29/Python_Jenkins"
-                        def proc = command.execute()
-                        proc.waitFor()
-                        proc.in.eachLine { line ->
-                            gitBranches.add(line.replaceAll(/^.+\\//, '').trim())
-                        }
-                        return gitBranches.sort()
-                    '''
-                ]
-            ]
-        ]
-    ])
-])
-
-pipeline {
+pipeline{
     agent any
 
+    parameters {
+        activeChoicesReactiveParam('BRANCH', 'Select git branch', groovyScript: [
+            classpath: [],
+            script: '''
+                def gitRepoUrl = "https://github.com/ptmkhanh29/Python_Jenkins.git"
+                def branches = []
+                def git = bat(returnStdout: true, script: "where git").trim()
+                bat(returnStdout: true, script: "cd %TEMP% && rmdir /s /q tmp || echo Directory not found && mkdir tmp && cd tmp && ${git} clone ${gitRepoUrl} && cd Python_Jenkins && for /f \"tokens=2\" %%G in ('${git} branch -r') do (set BRANCH=%%G && set BRANCH=!BRANCH:refs/remotes/origin/=! && echo !BRANCH! && choice /c YN /n /m \"Choose this branch?\" && if errorlevel 2 (set /A COUNT+=1) else (set BRANCH_SELECTED=!BRANCH!)) && if defined BRANCH_SELECTED (echo \"${BRANCH_SELECTED}\" && exit /B 0)")
+                if (COUNT > 0) {
+                    error("No branch selected")
+                }
+                return branches.sort()
+            '''
+        ])
+    }
+
     stages {
-        stage('Print the Values') {
+        stage('Print the Selected Branch') {
             steps {
-                echo "Git Branch: ${params.GIT_BRANCH}"
+                echo "Selected Branch: ${params.BRANCH}"
             }
         }
     }
