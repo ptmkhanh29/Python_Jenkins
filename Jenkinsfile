@@ -81,21 +81,12 @@ pipeline {
         }
     }
 }*/
+/*
 pipeline{
     agent any
     parameters {
         string(name: 'PARAMETER_NAME', defaultValue: 'default_value', description: 'Description of parameter')
-        activeChoiceReactiveParam('CHOICE-1') {
-            description('Allows user choose from multiple choices')
-            filterable()
-            choiceType('SINGLE_SELECT')
-            groovyScript {
-                script('["choice1", "choice2"]')
-                fallbackScript('"fallback choice"')
-            }
-            referencedParameter('BOOLEAN-PARAM-1')
-            referencedParameter('BOOLEAN-PARAM-2')
-        }
+        
     }
     stages {
         stage('Example Stage') {
@@ -105,4 +96,25 @@ pipeline{
             }
         }
     }
+}*/
+pipeline {
+    agent any
+    parameters {
+        activeChoicesReactiveParam('BRANCH', 'Select git branch') {
+            description('Select a git branch to build')
+            script {
+                def branches = sh(script: 'git ls-remote --heads origin | cut -d"/" -f3-', returnStdout: true).trim().split("\n")
+                return branches
+            }
+        }
+    }
+    stages {
+        stage('Build') {
+            steps {
+                git branch: "${params.BRANCH}", url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
+                sh "echo Building branch ${params.BRANCH}"
+            }
+        }
+    }
 }
+
