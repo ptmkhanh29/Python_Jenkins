@@ -81,14 +81,28 @@ pipeline {
         }
     }
 }*/
-pipeline {
+pipeline{
     agent any
     parameters {
         string(name: 'PARAMETER_NAME', defaultValue: 'default_value', description: 'Description of parameter')
+        activeChoicesReactiveParam('BRANCH', 'Select git branch') {
+            description('Select the branch to build')
+            choiceType('ET_BRANCH')
+            groovyScript("""
+                def gitUrl = 'https://github.com/ptmkhanh29/Python_Jenkins'
+                def branches = []
+                sh "git ls-remote --heads ${gitUrl} | cut -d'/' -f3 | sed 's/\\^{}//g' > branches.txt"
+                readFile('branches.txt').eachLine {
+                    branches.add(it.trim())
+                }
+                return branches
+            """)
+        }
     }
     stages {
         stage('Example Stage') {
             steps {
+                echo "Building branch: ${params.BRANCH}"
                 echo "The parameter value is: ${params.PARAMETER_NAME}"
             }
         }
