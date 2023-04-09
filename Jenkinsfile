@@ -97,6 +97,7 @@ pipeline{
         }
     }
 }*/
+/* OK
 properties([
     parameters([
         choice(
@@ -136,6 +137,52 @@ pipeline {
             steps {
                 echo "Environment: ${params.ENV}"
                 echo "Choice: ${params.CHOICES}"
+            }
+        }
+    }
+}*/
+properties([
+    parameters([
+        [
+            $class: 'ActiveChoicesReactiveParameter',
+            choiceType: 'PT_SINGLE_SELECT',
+            description: 'Select the git branch to build',
+            filterLength: 1,
+            filterable: false,
+            name: 'GIT_BRANCH',
+            script: [
+                $class: 'GroovyScript',
+                fallbackScript: [
+                    classpath: [],
+                    sandbox: false,
+                    script: 'return ["master"]'
+                ],
+                script: [
+                    classpath: [],
+                    sandbox: false,
+                    script: '''
+                        def gitBranches = []
+                        def command = "git ls-remote --heads https://github.com/ptmkhanh29/Python_Jenkins"
+                        def proc = command.execute()
+                        proc.waitFor()
+                        proc.in.eachLine { line ->
+                            gitBranches.add(line.replaceAll(/^.+\\//, '').trim())
+                        }
+                        return gitBranches.sort()
+                    '''
+                ]
+            ]
+        ]
+    ])
+])
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Print the Values') {
+            steps {
+                echo "Git Branch: ${params.GIT_BRANCH}"
             }
         }
     }
