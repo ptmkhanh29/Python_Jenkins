@@ -141,30 +141,45 @@ pipeline {
         }
     }
 }*/
-pipeline{
-    agent any
-
-    parameters {
-        activeChoicesReactiveParam('BRANCH', 'Select git branch', groovyScript: [
-            classpath: [],
-            script: '''
-                def gitRepoUrl = "https://github.com/ptmkhanh29/Python_Jenkins.git"
-                def branches = []
-                def git = bat(returnStdout: true, script: "where git").trim()
-                bat(returnStdout: true, script: "cd %TEMP% && rmdir /s /q tmp || echo Directory not found && mkdir tmp && cd tmp && ${git} clone ${gitRepoUrl} && cd Python_Jenkins && for /f \"tokens=2\" %%G in ('${git} branch -r') do (set BRANCH=%%G && set BRANCH=!BRANCH:refs/remotes/origin/=! && echo !BRANCH! && choice /c YN /n /m \"Choose this branch?\" && if errorlevel 2 (set /A COUNT+=1) else (set BRANCH_SELECTED=!BRANCH!)) && if defined BRANCH_SELECTED (echo \"${BRANCH_SELECTED}\" && exit /B 0)")
-                if (COUNT > 0) {
-                    error("No branch selected")
+properties([
+    parameters([
+        [
+            $class: 'DynamicReferenceParameter',
+            description: 'Select a git branch',
+            name: 'GIT_BRANCH',
+            script: [
+                $class: 'GroovyScript',
+                fallbackScript: [
+                    classpath: [],
+                    sandbox: false,
+                    script: '''
+                    return ["No git branches found"]
+                    '''
+                ],
+                script: '''
+                def gitUrl = "https://github.com/ptmkhanh29/Python_Jenkins.git"
+                def git = checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: gitUrl]]])
+                def branches = git.git("ls-remote --heads ${gitUrl}").split().collect { it.replaceAll(/.*refs\/heads\//, "") }
+                if (branches) {
+                    return branches
+                } else {
+                    return ["No git branches found"]
                 }
-                return branches.sort()
-            '''
-        ])
-    }
+                '''
+            ]
+        ]
+    ])
+])
 
+pipeline {
+    agent any
     stages {
-        stage('Print the Selected Branch') {
+        stage('Build') {
             steps {
-                echo "Selected Branch: ${params.BRANCH}"
+                echo "Building git branch ${params.GIT_BRANCH}"
+                // thực hiện build với git branch tương ứng được chọn
             }
         }
     }
 }
+
