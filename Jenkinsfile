@@ -97,24 +97,46 @@ pipeline{
         }
     }
 }*/
+properties([
+    parameters([
+        choice(
+            name: 'ENV',
+            choices: [
+                'dev',
+                'prod'
+            ]
+        ),
+        [$class: 'ChoiceParameter',
+            choiceType: 'PT_RADIO',
+            filterLength: 1,
+            filterable: false,
+            name: 'CHOICES',
+            script: [
+                $class: 'GroovyScript',
+                fallbackScript: [
+                    classpath: [],
+                    sandbox: false,
+                    script: 'return ["Check Jenkins ScriptApproval page"]'
+                ],
+                script: [
+                    classpath: [],
+                    sandbox: false,
+                    script: 'return ["One","Two:selected"]'
+                ]
+            ]
+        ]
+    ])
+])
+
 pipeline {
     agent any
-    parameters {
-        activeChoicesReactiveParam('BRANCH', 'Select git branch') {
-            description('Select a git branch to build')
-            script {
-                def branches = sh(script: 'git ls-remote --heads origin | cut -d"/" -f3-', returnStdout: true).trim().split("\n")
-                return branches
-            }
-        }
-    }
+
     stages {
-        stage('Build') {
+        stage('Print the Values') {
             steps {
-                git branch: "${params.BRANCH}", url: 'https://github.com/ptmkhanh29/Python_Jenkins.git'
-                sh "echo Building branch ${params.BRANCH}"
+                echo "Environment: ${params.ENV}"
+                echo "Choice: ${params.CHOICES}"
             }
         }
     }
 }
-
